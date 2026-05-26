@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 # ------------------------------------------------------------------------------ #
-# checksum: Compare a file's checksum to a provided checksum.                    #
+# inline-checksum: Compare a file's checksum to a provided checksum.             #
 #                                                                                #
 # MIT License                                                                    #
 # Copyright © 2026 Josh Beale                                                    #
@@ -75,7 +75,7 @@ usage() {
 
 version() {
 	cat <<-EOF
-		checksum 0.1.0
+		inline-checksum 0.1.0
 		Copyright © 2026 Josh Beale <jbeale2023@gmail.com>.
 		Licence: The MIT License.
 	EOF
