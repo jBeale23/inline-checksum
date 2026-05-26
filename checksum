@@ -1,0 +1,236 @@
+#!/usr/bin/env sh
+# ------------------------------------------------------------------------------ #
+# checksum: Compare a file's checksum to a provided checksum.                    #
+#                                                                                #
+# MIT License                                                                    #
+# Copyright © 2026 Josh Beale                                                    #
+# Permission is hereby granted, free of charge, to any person obtaining a copy   #
+# of this software and associated documentation files (the "Software"), to deal  #
+# in the Software without restriction, including without limitation the rights   #
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell      #
+# copies of the Software, and to permit persons to whom the Software is          #
+# furnished to do so, subject to the following conditions:                       #
+#                                                                                #
+# The above copyright notice and this permission notice shall be included in all #
+# copies or substantial portions of the Software.                                #
+#                                                                                #
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR     #
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,       #
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE    #
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER         #
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,  #
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE  #
+# SOFTWARE.                                                                      #
+# ------------------------------------------------------------------------------ #
+
+# ------------------------------------- #
+#             Return Codes              #
+# ------------------------------------- #
+# 0: Calculated Checksum Matched        #
+# 1: Calculated Checksum Did Not Match  #
+# 2: Error During Argument Parsing      #
+# 3: Missing Dependency                 #
+# 4: Unable to Make Temporary File      #
+# ------------------------------------- #
+
+_program_name="$(basename "${0}")"
+
+usage() {
+	cat <<-EOF
+		Calculates a checksum for a target and compares it to a provided checksum.
+
+		Usage: ${_program_name} [-h|V] | [-a[=| ]<ALGORITHM>] <CHECKSUM> [TARGET_FILE]
+
+		Options:
+		  -h, --help                  Show this help message and exit.
+		  -V, --version               Show version information and exit.
+		  -a, --algorithm <ALGORITHM> The algorithm used to compute the checksum. Accepts one of 'sha256', 'sha512', or 'md5'. Defaults to 'sha256' if unspecified.
+		      --                      Stop processing command line arguments.
+
+		Positional Arguments:
+		  <CHECKSUM>                  The checksum against which to compare.
+		  [TARGET_FILE]               The file to compute a checksum for. If absent or '-', read input from stdin.
+	EOF
+}
+
+version() {
+	cat <<-EOF
+		checksum 0.1.0
+		Copyright © 2026 Josh Beale <jbeale2023@gmail.com>.
+		Licence: The MIT License.
+	EOF
+}
+
+main() {
+	# -------------------- #
+	# Parse Optional Flags #
+	# -------------------- #
+	while [ "${#}" -gt 0 ]; do
+		if printf "%s" "${1}" | grep -q -E -- "^(-h)|(--h(e(l(p)?)?)?)" 2>/dev/null; then
+			usage
+			shift 1
+			return 0
+		elif printf "%s" "${1}" | grep -q -E -- "^(-V)|(--v(e(r(s(i(o(n)?)?)?)?)?)?)" 2>/dev/null; then
+			version
+			shift 1
+			return 0
+		elif printf "%s" "${1}" | grep -q -E -- "(-a)|(--a(l(g(o(r(i(t(h(m)?)?)?)?)?)?)?)?)" 2>/dev/null; then
+			case "${1}" in
+			*=*)
+				leader="${1%%=*}="
+				algorithm="${1#"${leader}"}"
+				;;
+			--algorithm*)
+				algorithm="${1#--algorithm}"
+				;;
+			--algorith*)
+				algorithm="${1#--algorith}"
+				;;
+			--algorit*)
+				algorithm="${1#--algorit}"
+				;;
+			--algori*)
+				algorithm="${1#--algori}"
+				;;
+			--algor*)
+				algorithm="${1#--algor}"
+				;;
+			--algo*)
+				algorithm="${1#--algo}"
+				;;
+			--alg*)
+				algorithm="${1#--alg}"
+				;;
+			--al*)
+				algorithm="${1#--al}"
+				;;
+			--a*)
+				algorithm="${1#--a}"
+				;;
+			-a*)
+				algorithm="${1#-a}"
+				;;
+			*)
+				printf "[%s]: %s: invalid algorithm format -- '%s\n'" "$(date +'%H:%M:%S')" "${_program_name}" "${1}" >&2
+				return 2
+				;;
+			esac
+			if [ -z "${algorithm}" ]; then
+				if [ -n "${2}" ]; then
+					case "${2}" in
+					-*) ;;
+					*)
+						algorithm="${2}"
+						shift 1
+						;;
+					esac
+				fi
+			fi
+			shift 1
+			case "${algorithm}" in
+			sha256)
+				if ! sha256sum --version >/dev/null 2>&1; then
+					printf "[%s]: %s: sha256sum must be installed to check sha256 hashes.\n" "$(date +'%H:%M:%S')" "${_program_name}" >&2
+					return 3
+				fi
+				;;
+			sha512)
+				if ! sha512sum --version >/dev/null 2>&1; then
+					printf "[%s]: %s: sha512sum must be installed to check sha512 hashes.\n" "$(date +'%H:%M:%S')" "${_program_name}" >&2
+					return 3
+				fi
+				;;
+			md5)
+				if ! md5sum --version >/dev/null 2>&1; then
+					printf "[%s]: %s: md5sum must be installed to check md5 hashes.\n" "$(date +'%H:%M:%S')" "${_program_name}" >&2
+					return 3
+				fi
+				;;
+			*)
+				printf "[%s]: %s: If '--algorithm' is specified, one of 'sha256', 'sha512', or 'md5' must be provided.\n" "$(date +'%H:%M:%S')" "${_program_name}" >&2
+				return 2
+				;;
+			esac
+		elif [ "${1}" = "--" ]; then
+			shift
+			break
+		elif printf "%s" "${1}" | grep -q -E -- "^-.*" 2>/dev/null; then
+			printf "[%s]: %s: invalid option -- '%s'\n" "$(date +'%H:%M:%S')" "${_program_name}" "${1}" >&2
+			return 2
+		else
+			break
+		fi
+	done
+
+	# ---------------------------------- #
+	# Parse Required Positional Argument #
+	# ---------------------------------- #
+	if [ "${#}" -lt 1 ]; then
+		printf "[%s]: %s: <CHECKSUM> must be provided.\n" "$(date +'%H:%M:%S')" "${_program_name}" >&2
+		return 2
+	fi
+	provided_hash="${1}"
+
+	# -------------------------- #
+	# Parse Target File or Stdin #
+	# -------------------------- #
+	if [ -n "${2}" ]; then
+		target_file="${2}"
+	fi
+	if [ -z "${target_file}" ] || [ "${target_file}" = "-" ]; then
+		parsing_stdin=:
+
+		# ------------------------------------------- #
+		# Create Temporary File for Checksum of Stdin #
+		# ------------------------------------------- #
+		if ! tmp=$(mktemp -q -- "${TMPDIR:-/tmp}/checksum.XXXXXXXXXXXXXXXX"); then
+			printf "[%s]: %s: failed to create temporary file.\n" "$(date +'%H:%M:%S')" "${_program_name}" >&2
+			return 4
+		else
+			trap 'rm -rf "${tmp}"' EXIT HUP INT QUIT ABRT TERM # Removes the temp file when execution finishes, except on receipt of SIGKILL
+		fi
+		cat - >"${tmp}"
+		target_file="${tmp}"
+	fi
+
+	# ---------------------------------- #
+	# Calculate Checksum for Target File #
+	# ---------------------------------- #
+	if [ -z "${algorithm}" ]; then
+		algorithm="sha256"
+		if ! sha256sum --version >/dev/null 2>&1; then
+			printf "[%s]: %s: sha256sum must be installed to check sha256 hashes.\n" "$(date +'%H:%M:%S')" "${_program_name}" >&2
+			return 3
+		fi
+	fi
+	case "${algorithm}" in
+	sha256)
+		printf "%s %s" "${provided_hash}" "${target_file}" | sha256sum --status --check -
+		status="${?}"
+		;;
+	sha512)
+		printf "%s %s" "${provided_hash}" "${target_file}" | sha512sum --status --check -
+		status="${?}"
+		;;
+	md5)
+		printf "%s %s" "${provided_hash}" "${target_file}" | md5sum --status --check -
+		status="${?}"
+		;;
+	*)
+		printf "[%s]: %s: Invalid algorithm '%s' was specified. One of 'sha256', 'sha512', or 'md5' must be provided.\n" "$(date +'%H:%M:%S')" "${_program_name}" "${algorithm}" >&2
+		return 2
+		;;
+	esac
+
+	# ------------------------------------------------ #
+	# Compare Calculated Checksum to Provided Checksum #
+	# ------------------------------------------------ #
+	if [ "${status}" -ne 0 ]; then
+		printf "[%s]: %s: checksum for target file '%s' does not match provided checksum '%s' using algorithm '%s'.\n" "$(date +'%H:%M:%S')" "${_program_name}" "${target_file}" "${provided_hash}" "${algorithm}" >&2
+		return 1
+	fi
+	if "${parsing_stdin}"; then
+		cat "${tmp}"
+	fi
+}
+main "${@}" || exit "${?}"
