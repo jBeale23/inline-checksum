@@ -252,8 +252,12 @@ main() {
 		printf "[%s]: %s: checksum for target file '%s' does not match provided checksum '%s' using algorithm '%s'.\n" "$(date +'%H:%M:%S')" "${_program_name}" "${target_file}" "${provided_hash}" "${algorithm}" >&2
 		return 1
 	fi
-	if [ ! -t 1 ] && [ -n "${tmp}" ]; then # Only emit tmp to stdout if it exists there's something besides a terminal there to catch it.
-		cat "${tmp}"
+	if [ ! -t 1 ]; then # Only emit to stdout if it exists there's something besides a terminal there to catch it.
+		if [ -n "${tmp}" ]; then
+			cat "${tmp}"
+			return 0
+		fi
+		cat "${target_file}"
 	fi
 }
 main "${@}" || exit "${?}"
