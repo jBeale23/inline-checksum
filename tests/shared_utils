@@ -19,24 +19,35 @@ export script="${parent_dir}/inline-checksum"
 export timestamp="$(date +'%Y.%m.%d.%H.%M.%S')"
 exec 2>>"${wkdir}/${timestamp}.test.log"
 
-if ! command -v sha256sum >/dev/null 2>&1; then
-	printf "[%s]: sha256sum must be installed to check sha256 hashes.\n" "$(date +'%H:%M:%S')" >&2
-	return 1
-else
+export return_sha256=4
+export return_sha512=5
+export return_md5=6
+
+if command -v sha256sum >/dev/null 2>&1; then
 	export correct_sha256="$(sha256sum "${license_file}" | cut -f 1 -d " ")"
-	export return_sha256=4
-fi
-if ! command -v sha512sum >/dev/null 2>&1; then
-	printf "[%s]: sha512sum must be installed to check sha512 hashes.\n" "$(date +'%H:%M:%S')" >&2
-	return 2
+elif command -v shasum >/dev/null 2>&1; then
+	export correct_sha256="$(shasum -a 256 "${license_file}" | cut -f 1 -d " ")"
+elif command -v openssl >/dev/null 2>&1; then
+	export correct_sha256="$(openssl sha512 "${license_file}" | cut -f 2 -d " ")"
 else
+	printf "[%s]: sha256sum or an equivalent must be installed to check sha256 hashes.\n" "$(date +'%H:%M:%S')" >&2
+	return 1
+fi
+if command -v sha512sum >/dev/null 2>&1; then
 	export correct_sha512="$(sha512sum "${license_file}" | cut -f 1 -d " ")"
-	export return_sha512=5
-fi
-if ! command -v md5sum >/dev/null 2>&1; then
-	printf "[%s]: md5sum must be installed to check md5 hashes.\n" "$(date +'%H:%M:%S')" >&2
-	return 3
+elif command -v shasum >/dev/null 2>&1; then
+	export correct_sha512="$(shasum -a 512 "${license_file}" | cut -f 1 -d " ")"
+elif command -v openssl >/dev/null 2>&1; then
+	export correct_sha512="$(openssl sha512 "${license_file}" | cut -f 2 -d " ")"
 else
+	printf "[%s]: sha512sum or an equivalent must be installed to check sha512 hashes.\n" "$(date +'%H:%M:%S')" >&2
+	return 2
+fi
+if command -v md5sum >/dev/null 2>&1; then
 	export correct_md5="$(md5sum "${license_file}" | cut -f 1 -d " ")"
-	export return_md5=6
+elif command -v openssl >/dev/null 2>&1; then
+	export correct_sha512="$(openssl md5 "${license_file}" | cut -f 2 -d " ")"
+else
+	printf "[%s]: md5sum or an equivalent must be installed to check md5 hashes.\n" "$(date +'%H:%M:%S')" >&2
+	return 3
 fi
