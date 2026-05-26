@@ -1,3 +1,4 @@
+![Inline-Checksum Logo](logo.png)
 # Inline-Checksum
 A POSIX compliant rework of [inline-md5sum](https://github.com/cmonr/inline-md5sum), adding support for sha256 and sha512 checksums.
 
