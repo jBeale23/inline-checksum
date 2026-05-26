@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 # ------------------------------------------------------------------------------ #
-# inline-checksum: Compare a file's checksum to a provided checksum.             #
+# Inline-Checksum: Compare a file's checksum to a provided checksum.             #
 #                                                                                #
 # MIT License                                                                    #
 # Copyright © 2026 Josh Beale                                                    #
@@ -69,13 +69,16 @@ usage() {
 
 		Positional Arguments:
 		  <CHECKSUM>                  The checksum against which to compare.
-		  [TARGET_FILE]               The file to compute a checksum for. If absent or '-', read input from stdin.
+		  [TARGET_FILE]               The file to compute a checksum for. If absent or '-', reads input from stdin.
+
+		Example:
+		  curl -fsSL <url> | inline-checksum [--algorithm[=| ]<sha256|sha512|md5>] <checksum> | sh -
 	EOF
 }
 
 version() {
 	cat <<-EOF
-		inline-checksum 0.1.0
+		Inline-Checksum 0.1.0
 		Copyright © 2026 Josh Beale <jbeale2023@gmail.com>.
 		Licence: The MIT License.
 	EOF
@@ -197,9 +200,8 @@ main() {
 	if [ -n "${2}" ]; then
 		target_file="${2}"
 	fi
-	if [ -z "${target_file}" ] || [ "${target_file}" = "-" ]; then
-		parsing_stdin=:
-
+	target_file="${target_file:--}"
+	if [ "${target_file}" = "-" ]; then
 		# ------------------------------------------- #
 		# Create Temporary File for Checksum of Stdin #
 		# ------------------------------------------- #
@@ -249,7 +251,7 @@ main() {
 		printf "[%s]: %s: checksum for target file '%s' does not match provided checksum '%s' using algorithm '%s'.\n" "$(date +'%H:%M:%S')" "${_program_name}" "${target_file}" "${provided_hash}" "${algorithm}" >&2
 		return 1
 	fi
-	if "${parsing_stdin}"; then
+	if [ ! -t 1 ] && [ -n "${tmp}" ]; then # Only emit tmp to stdout if it exists there's something besides a terminal there to catch it.
 		cat "${tmp}"
 	fi
 }
