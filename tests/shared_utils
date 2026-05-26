@@ -19,21 +19,21 @@ export script="${parent_dir}/inline-checksum"
 export timestamp="$(date +'%Y.%m.%d.%H.%M.%S')"
 exec 2>>"${wkdir}/${timestamp}.test.log"
 
-if ! sha256sum --version >/dev/null 2>&1; then
+if ! sha256sum --help >/dev/null 2>&1; then
 	printf "[%s]: sha256sum must be installed to check sha256 hashes.\n" "$(date +'%H:%M:%S')" >&2
 	return 1
 else
 	export correct_sha256="$(sha256sum "${license_file}" | cut -f 1 -d " ")"
 	export return_sha256=4
 fi
-if ! sha512sum --version >/dev/null 2>&1; then
+if ! sha512sum --help >/dev/null 2>&1; then
 	printf "[%s]: sha512sum must be installed to check sha512 hashes.\n" "$(date +'%H:%M:%S')" >&2
 	return 2
 else
 	export correct_sha512="$(sha512sum "${license_file}" | cut -f 1 -d " ")"
 	export return_sha512=5
 fi
-if ! md5sum --version >/dev/null 2>&1; then
+if ! md5sum --help >/dev/null 2>&1; then
 	printf "[%s]: md5sum must be installed to check md5 hashes.\n" "$(date +'%H:%M:%S')" >&2
 	return 3
 else
