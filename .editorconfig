@@ -1,0 +1,12 @@
+[*]
+end_of_line = lf
+insert_final_newline = true
+charset = utf-8
+indent_style = tab
+
+[*.sh]
+shell_variant = posix
+switch_case_indent = true
+space_redirects = true
+binary_next = true
+simplify = true
