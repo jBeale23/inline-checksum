@@ -153,19 +153,19 @@ main() {
 			shift 1
 			case "${algorithm}" in
 			sha256)
-				if ! sha256sum --help >/dev/null 2>&1; then
+				if ! command -v sha256sum >/dev/null 2>&1; then
 					printf "[%s]: %s: sha256sum must be installed to check sha256 hashes.\n" "$(date +'%H:%M:%S')" "${_program_name}" >&2
 					return 3
 				fi
 				;;
 			sha512)
-				if ! sha512sum --help >/dev/null 2>&1; then
+				if ! command -v sha512sum >/dev/null 2>&1; then
 					printf "[%s]: %s: sha512sum must be installed to check sha512 hashes.\n" "$(date +'%H:%M:%S')" "${_program_name}" >&2
 					return 3
 				fi
 				;;
 			md5)
-				if ! md5sum --help >/dev/null 2>&1; then
+				if ! command -v md5sum >/dev/null 2>&1; then
 					printf "[%s]: %s: md5sum must be installed to check md5 hashes.\n" "$(date +'%H:%M:%S')" "${_program_name}" >&2
 					return 3
 				fi
