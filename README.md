@@ -18,7 +18,7 @@ curl -fsSL <url> | inline-checksum [--algorithm[=| ]<sha256|sha512|md5>] <checks
 
 Alternatively, a local file can have its checksum validated as follows:
 ```sh
-inline-checksum [--algorithm[=| ]<sha256|sha512|md5>] <checksum>
+inline-checksum [--algorithm[=| ]<sha256|sha512|md5>] <checksum> <file>
 ```
 
 # Origin
