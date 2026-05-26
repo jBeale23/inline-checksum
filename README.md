@@ -5,7 +5,7 @@ This script is designed to alleviate some of the security concerns of running `c
 It also serves as a convenience wrapper for validating the checksum of an already existing file.
 
 # Installation
-Clone the repository, put `inline-checksum` anywhere on your $PATH, and make sure it's executable, and you're all set.
+Clone the repository, put `inline-checksum` anywhere on your $PATH, make sure it's executable, and you're all set.
 
 
 You can install tab completions for Bash and Zsh by sourcing the included `inline-checksum-completions` file in your corresponding shell rc file.
