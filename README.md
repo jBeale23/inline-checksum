@@ -7,6 +7,10 @@ It also serves as a convenience wrapper for validating the checksum of an alread
 # Installation
 Clone the repository, put `inline-checksum` anywhere on your $PATH, and make sure it's executable, and you're all set.
 
+
+You can install tab completions for Bash and Zsh by sourcing the included `inline-checksum-completions` file in your corresponding shell rc file.
+
+
 You can run the full test suite by running `make test` to ensure that all dependencies are met and that things are behaving as you'd expect.
 After running the test suite, you can clean up the generated log files with `make clean`.
 
