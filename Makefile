@@ -1,7 +1,14 @@
 SHELL := /usr/bin/env sh
 TESTS := $(wildcard tests/*.sh)
 
-.PHONY: test
+.PHONY: clean test
+
+clean:
+ifneq ($(wildcard tests/*.log),)
+	$(RM) tests/*.log
+else
+	@printf "Nothing to clean.\n"
+endif
 
 test:
 	@FAILURE=0; \
