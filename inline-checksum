@@ -227,15 +227,15 @@ main() {
 	fi
 	case "${algorithm}" in
 	sha256)
-		printf "%s %s" "${provided_hash}" "${target_file}" | sha256sum -s -c -
+		printf "%s  %s" "${provided_hash}" "${target_file}" | sha256sum -c - >/dev/null 2>&1
 		status="${?}"
 		;;
 	sha512)
-		printf "%s %s" "${provided_hash}" "${target_file}" | sha512sum -s -c -
+		printf "%s  %s" "${provided_hash}" "${target_file}" | sha512sum -c - >/dev/null 2>&1
 		status="${?}"
 		;;
 	md5)
-		printf "%s %s" "${provided_hash}" "${target_file}" | md5sum -s -c -
+		printf "%s  %s" "${provided_hash}" "${target_file}" | md5sum -c - >/dev/null 2>&1
 		status="${?}"
 		;;
 	*)
