@@ -71,8 +71,9 @@ usage() {
 		  <CHECKSUM>                  The checksum against which to compare.
 		  [TARGET_FILE]               The file to compute a checksum for. If absent or '-', reads input from stdin.
 
-		Example:
+		Examples:
 		  curl -fsSL <url> | inline-checksum [--algorithm[=| ]<sha256|sha512|md5>] <checksum> | sh -
+		  inline-checksum [--algorithm[=| ]<sha256|sha512|md5>] <checksum> <file>
 	EOF
 }
 
