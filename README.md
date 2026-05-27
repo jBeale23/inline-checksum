@@ -31,4 +31,4 @@ Inline-Checksum is adapted and updated from the following source:
 - The work of Cruz Monrreal on [inline-md5sum](https://github.com/cmonr/inline-md5sum) under the terms of the MIT License.
 
 # License
-Inline-Checksum is licensed under the terms of the [MIT License](https://github.com/jBeale23/inline-checksum/blob/main/LICENSE).
+Inline-Checksum is licensed under the terms of the [MIT License](LICENSE).
