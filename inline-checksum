@@ -82,7 +82,9 @@ version() {
 	cat <<-EOF
 		Inline-Checksum 1.0.0
 		Copyright © 2026 Josh Beale <jbeale2023@gmail.com>.
-		Licence: The MIT License.
+		Licence MIT: <https://directory.fsf.org/wiki/License:Expat>
+		This is free software: you are free to change and redistribute it.
+		There is NO WARRANTY, to the extent permitted by law.
 	EOF
 }
 
