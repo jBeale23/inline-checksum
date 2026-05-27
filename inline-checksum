@@ -80,7 +80,7 @@ usage() {
 
 version() {
 	cat <<-EOF
-		Inline-Checksum 0.1.0
+		Inline-Checksum 1.0.0
 		Copyright © 2026 Josh Beale <jbeale2023@gmail.com>.
 		Licence: The MIT License.
 	EOF
