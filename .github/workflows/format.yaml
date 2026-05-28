@@ -1,0 +1,18 @@
+name: Format (shfmt)
+
+on:
+  workflow_call:
+
+jobs:
+  shfmt:
+    name: Format with shfmt
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Install shfmt
+        run: apt install shfmt
+
+      - name: Run shfmt
+        run: shfmt -d .
