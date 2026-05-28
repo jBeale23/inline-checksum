@@ -11,6 +11,8 @@ _generate_inline_checksum_completions() {
     "-V: Show version information and exit."
     "--algorithm: Specify the algorithm used to compute the checksum. Accepts one of 'sha256', 'sha512', or 'md5'."
     "-a: Specify the algorithm used to compute the checksum. Accepts one of 'sha256', 'sha512', or 'md5'."
+    "--output-filename: Output filename while capturing stdout instead of file contents."
+    "-x: Output filename while capturing stdout instead of file contents."
     "--: Stop processing command line arguments."
   )
   for elem in "${array[@]}"; do
