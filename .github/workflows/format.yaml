@@ -12,7 +12,9 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Install shfmt
-        run: apt install shfmt
+        uses: mfinelli/setup-shfmt@v4
+        with:
+          shfmt-version: 'latest'
 
       - name: Run shfmt
         run: shfmt -d .
