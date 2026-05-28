@@ -11,16 +11,16 @@
 # 6: Failed on md5sum Check             #
 # ------------------------------------- #
 
-if [ -z "${wkdir}" ]; then
-	wkdir="$(CDPATH="" cd -- "$(dirname -- "${0}")" && pwd -P)"
-fi
+wkdir="$(CDPATH="" cd -- "$(dirname -- "${0}")" && pwd -P)"
+parent_dir="$(dirname "${wkdir}")"
 
 license_file="${parent_dir}/LICENSE"
-parent_dir="$(dirname "${wkdir}")"
+script="${parent_dir}/inline-checksum"
+
 return_md5=6
 return_sha256=4
 return_sha512=5
-script="${parent_dir}/inline-checksum"
+
 timestamp="$(date +'%Y.%m.%d.%H.%M.%S')"
 exec 2>>"${wkdir}/${timestamp}.test.log"
 
