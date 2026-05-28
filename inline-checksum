@@ -81,7 +81,7 @@ usage() {
 
 version() {
 	cat <<-EOF
-		Inline-Checksum 1.0.1
+		Inline-Checksum 1.1.0
 		Copyright © 2026 Josh Beale <jbeale2023@gmail.com>.
 		Licence MIT: <https://directory.fsf.org/wiki/License:Expat>
 		This is free software: you are free to change and redistribute it.
