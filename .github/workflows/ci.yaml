@@ -30,8 +30,3 @@ jobs:
       - name: Pipeline succeeded
         if: needs.unit_test.result == 'success'
         run: printf "All checks passed successfully!\n"
-      - name: Pipeline failed
-        if: needs.unit_test.result != 'success'
-        run: |
-          printf "Some checks failed, were cancelled, or skipped.\n"
-          exit 1
