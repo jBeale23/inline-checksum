@@ -11,25 +11,27 @@
 # 6: Failed on md5sum Check             #
 # ------------------------------------- #
 
+# ---------- #
+# Test Setup #
+# ---------- #
+
 wkdir="$(CDPATH="" cd -- "$(dirname -- "${0}")" && pwd -P)"
 parent_dir="$(dirname "${wkdir}")"
 
 license_file="${parent_dir}/LICENSE"
 script="${parent_dir}/inline-checksum"
 
-return_md5=6
 return_sha256=4
 return_sha512=5
+return_md5=6
 
 timestamp="$(date +'%Y.%m.%d.%H.%M.%S')"
 exec 2>>"${wkdir}/${timestamp}.test.log"
 
 if command -v sha256sum >/dev/null 2>&1; then
 	correct_sha256="$(sha256sum "${license_file}" | cut -f 1 -d " ")"
-	export correct_sha256
 elif command -v shasum >/dev/null 2>&1; then
 	correct_sha256="$(shasum -a 256 "${license_file}" | cut -f 1 -d " ")"
-	export correct_sha256
 elif command -v openssl >/dev/null 2>&1; then
 	correct_sha256="$(openssl sha512 "${license_file}" | cut -f 2 -d " ")"
 else
@@ -66,3 +68,7 @@ export return_sha512
 export script
 export timestamp
 export wkdir
+
+# ----------- #
+# Begin Tests #
+# ----------- #
