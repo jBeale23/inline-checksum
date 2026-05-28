@@ -66,7 +66,7 @@ usage() {
 		  -h, --help                  Show this help message and exit.
 		  -V, --version               Show version information and exit.
 		  -a, --algorithm <ALGORITHM> The algorithm used to compute the checksum. Accepts one of 'sha256', 'sha512', or 'md5'. Defaults to 'sha256' if unspecified.
-			-x, --output-filename       Output filename when piping, instead of file contents. The caller is responsible for cleaning up any resulting temporary files.
+		  -x, --output-filename       Output filename when piping, instead of file contents. The caller is responsible for cleaning up any resulting temporary files.
 		      --                      Stop processing command line arguments.
 
 		Positional Arguments:
