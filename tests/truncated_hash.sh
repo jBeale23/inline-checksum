@@ -2,7 +2,7 @@
 # ------------------------------------- #
 #             Return Codes              #
 # ------------------------------------- #
-# 0: All Algorithms Fail on Truncation  #
+# 0: All Algorithms Fail                #
 # 1: Missing sha256sum                  #
 # 2: Missing sha512sum                  #
 # 3: Missing md5sum                     #

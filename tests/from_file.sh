@@ -2,7 +2,7 @@
 # ------------------------------------- #
 #             Return Codes              #
 # ------------------------------------- #
-# 0: All Algorithms Pass with Stdin     #
+# 0: All Algorithms Pass                #
 # 1: Missing sha256sum                  #
 # 2: Missing sha512sum                  #
 # 3: Missing md5sum                     #
