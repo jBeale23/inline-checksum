@@ -66,6 +66,7 @@ usage() {
 		  -h, --help                  Show this help message and exit.
 		  -V, --version               Show version information and exit.
 		  -a, --algorithm <ALGORITHM> The algorithm used to compute the checksum. Accepts one of 'sha256', 'sha512', or 'md5'. Defaults to 'sha256' if unspecified.
+			-x, --output-filename       Output filename when piping, instead of file contents. The caller is responsible for cleaning up any resulting temporary files.
 		      --                      Stop processing command line arguments.
 
 		Positional Arguments:
@@ -194,6 +195,9 @@ main() {
 				return 2
 				;;
 			esac
+		elif printf "%s" "${1}" | grep -q -E -- "(-x)|(--o(u(t(p(u(t(-(f(i(l(e(n(a(m(e)?)?)?)?)?)?)?)?)?)?)?)?)?)?)" 2>/dev/null; then
+			output_file_name="1"
+			shift 1
 		elif [ "${1}" = "--" ]; then
 			shift
 			break
@@ -229,7 +233,9 @@ main() {
 			printf "[%s]: %s: failed to create temporary file.\n" "$(date +'%H:%M:%S')" "${_program_name}" >&2
 			return 4
 		else
-			trap 'rm -rf "${tmp}"' EXIT HUP INT QUIT ABRT TERM # Removes the temp file when execution finishes, except on receipt of SIGKILL
+			if [ -z "${output_file_name}" ]; then
+				trap 'rm -rf "${tmp}"' EXIT HUP INT QUIT ABRT TERM # Removes the temp file when execution finishes, except on receipt of SIGKILL or if the filepath is meant to be output
+			fi
 		fi
 		cat - >"${tmp}"
 		target_file="${tmp}"
@@ -294,8 +300,8 @@ main() {
 		return 1
 	fi
 	if [ ! -t 1 ]; then # Only emit to stdout if it exists there's something besides a terminal there to catch it.
-		if [ -n "${tmp}" ]; then
-			cat "${tmp}"
+		if [ -n "${output_file_name}" ]; then
+			printf "%s\n" "${target_file}"
 			return 0
 		fi
 		cat "${target_file}"
