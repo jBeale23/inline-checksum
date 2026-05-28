@@ -15,9 +15,9 @@ test:
 	for test in $(TESTS); do \
 	printf "[%s] Test %s: " "$$(date +'%H:%M:%S')" "$$test"; \
 		if $$test; then \
-			printf "SUCCESS"; \
+			printf "\033[32mSUCCESS\033[0m"; \
 		else \
-			printf "FAILURE"; \
+			printf "\033[31mFAILURE\033[0m"; \
 			FAILURE=1; \
 		fi; \
 		printf "\n"; \
