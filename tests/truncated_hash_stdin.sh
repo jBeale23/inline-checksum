@@ -27,7 +27,7 @@ for algorithm in "sha256" "sha512" "md5"; do
 	case "${?}" in
 		1);;
 		*)
-			printf "[%s]: Failed truncation test with algorithm '%s'.\n" "$(date +'%H:%M:%S')" "${algorithm}" >&2
+			printf "[%s]: Failed truncated hash from stdin test with algorithm '%s'.\n" "$(date +'%H:%M:%S')" "${algorithm}" >&2
 			return "${return_code}"
 			;;
 	esac
