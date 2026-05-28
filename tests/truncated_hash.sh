@@ -23,7 +23,7 @@ for algorithm in "sha256" "sha512" "md5"; do
 	done
 	return_code_pointer=$(printf "return_%s" "${algorithm}")
 	eval "return_code=\$${return_code_pointer}"
-	cat "${license_file}" | "${script}" --algorithm="${algorithm}" "${truncated_hash}" - > /dev/null
+	cat "${license_file}" | "${script}" --algorithm="${algorithm}" "${truncated_hash}" - > /dev/null 2>&1
 	case "${?}" in
 		1);;
 		*)
