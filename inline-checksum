@@ -289,7 +289,7 @@ main() {
 	# ------------------------------------------------ #
 	# Compare Calculated Checksum to Provided Checksum #
 	# ------------------------------------------------ #
-	if [ "${hash}" -ne "${provided_hash}" ]; then
+	if [ "${hash}" != "${provided_hash}" ]; then
 		printf "[%s]: %s: checksum for target file '%s' does not match provided checksum '%s' using algorithm '%s'.\n" "$(date +'%H:%M:%S')" "${_program_name}" "${target_file}" "${provided_hash}" "${algorithm}" >&2
 		return 1
 	fi
