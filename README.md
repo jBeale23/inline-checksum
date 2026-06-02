@@ -9,9 +9,10 @@ It also serves as a convenience wrapper for validating the checksum of an alread
 
 # Installation
 
-Clone the repository, put `inline-checksum` anywhere on your $PATH, make sure it's executable, and you're all set.
+Clone the repository and run `sudo make install` to install `inline-checksum` and its completions for all users.
 
-You can install tab completions for Bash and Zsh by sourcing the included `inline-checksum-completions` file in your corresponding shell rc file.
+Alternatively, put `inline-checksum` anywhere on your $PATH, make sure it's executable, and you're all set.
+You can manually install tab completions for Bash and Zsh by sourcing the included `inline-checksum-completions` file in your corresponding shell rc file.
 
 You can run the full test suite by running `make test` to ensure that all dependencies are met and that things are behaving as you'd expect.
 After running the test suite, you can clean up the generated log files with `make clean`.
@@ -29,6 +30,12 @@ Alternatively, a local file can have its checksum validated as follows:
 ```sh
 inline-checksum [--algorithm[=| ]<sha256|sha512|md5>] <checksum> <file>
 ```
+
+# Uninstallation
+
+If you installed with `sudo make install`, you can remove `inline-checksum` and its completions with `sudo make uninstall`.
+
+Alternatively, just delete `inline-checksum` and its completion files if you installed it manually.
 
 # Origin
 
