@@ -60,7 +60,7 @@ usage() {
 	cat <<-EOF
 		Calculates a checksum for a target and compares it to a provided checksum.
 
-		Usage: ${_program_name} [-h|V] | [-a[=| ]<ALGORITHM>] <CHECKSUM> [TARGET_FILE]
+		Usage: ${_program_name} [-h|V] | [-x] [-a[=| ]<ALGORITHM>] <CHECKSUM> [TARGET_FILE]
 
 		Options:
 		  -h, --help                  Show this help message and exit.
@@ -74,8 +74,8 @@ usage() {
 		  [TARGET_FILE]               The file to compute a checksum for. If absent or '-', reads input from stdin.
 
 		Examples:
-		  curl -fsSL <url> | inline-checksum [--algorithm[=| ]<sha256|sha512|md5>] <checksum> | sh -
-		  inline-checksum [--algorithm[=| ]<sha256|sha512|md5>] <checksum> <file>
+		  curl -fsSL <url> | inline-checksum [-x] [--algorithm[=| ]<sha256|sha512|md5>] <checksum> | sh -
+		  inline-checksum [-x] [--algorithm[=| ]<sha256|sha512|md5>] <checksum> <file> [| sh -]
 	EOF
 }
 
