@@ -22,7 +22,12 @@ ifneq ($(wildcard tests/*.log),)
 	@printf "Cleaning up test logs.\n"
 	@$(RM) tests/*.log
 else
-	@printf "Nothing to clean.\n"
+	@printf "No test logs to clean.\n"
+endif
+ifneq ($(wildcard docs/*.1),)
+	@$(RM) docs/*.1
+else
+	@printf "No man pages to clean.\n"
 endif
 
 test:
@@ -40,7 +45,7 @@ test:
 	[ "$$FAILURE" -eq 0 ] || exit 1
 
 info:
-	@help2man inline-checksum -o docs/inline-checksum.1
+	@help2man ./inline-checksum -o docs/inline-checksum.1
 
 install: install-inline-checksum install-inline-checksum-docs
 
