@@ -25,6 +25,7 @@ else
 	@printf "No test logs to clean.\n"
 endif
 ifneq ($(wildcard docs/*.1),)
+	@printf "Cleaning up man pages.\n"
 	@$(RM) docs/*.1
 else
 	@printf "No man pages to clean.\n"
@@ -47,7 +48,7 @@ test:
 info:
 	@help2man ./inline-checksum -o docs/inline-checksum.1
 
-install: install-inline-checksum install-inline-checksum-docs
+install: install-inline-checksum install-inline-checksum-info
 
 install-inline-checksum:
 	@printf "Installing inline-checksum to %s/bin...\n" $(DESTDIR)$(PREFIX)
@@ -59,14 +60,15 @@ install-inline-checksum-info: info
 	@printf "Installing inline-checksum zsh completion to %s...\n" $(DESTDIR)$(ZSH_COMP_DIR)
 	@$(INSTALL) -Dm 644 docs/inline-checksum-completion $(DESTDIR)$(ZSH_COMP_DIR)/_inline-checksum
 	@printf "Installing inline-checksum man page to %s...\n" $(DESTDIR)$(MAN1DIR)
-	-@$(INSTALL) -Dm 644 docs/inline-checksum.1 $(DESTDIR)$(MAN1DIR)/inline-checksum.1
-	-@gzip $(DESTDIR)$(MAN1DIR)/inline-checksum.1
-	-@mandb -q
+	@$(INSTALL) -Dm 644 docs/inline-checksum.1 $(DESTDIR)$(MAN1DIR)/inline-checksum.1
+	@gzip $(DESTDIR)$(MAN1DIR)/inline-checksum.1
+	-@mandb > /dev/null 2>&1
 
 uninstall:
 	@printf "Uninstalling inline-checksum from %s/bin...\n" $(DESTDIR)$(PREFIX)
+	@printf "Uninstalling inline-checksum documentation from %s...\n" $(DESTDIR)$(PREFIX)
 	@$(RM) $(DESTDIR)$(PREFIX)/bin/inline-checksum
 	@$(RM) $(DESTDIR)$(BASH_COMP_DIR)/inline-checksum
 	@$(RM) $(DESTDIR)$(ZSH_COMP_DIR)/_inline-checksum
-	@$(RM) $(DESTDIR)$(MAN1DIR)/inline-checksum.1
-	-@mandb -q
+	@$(RM) $(DESTDIR)$(MAN1DIR)/inline-checksum.1.gz
+	-@mandb > /dev/null 2>&1
