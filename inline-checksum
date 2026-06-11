@@ -208,6 +208,7 @@ main() {
 	# -------------------------- #
 	# Validate Algorithm Backend #
 	# -------------------------- #
+	algorithm="${algorithm:-sha256}"
 	case "${algorithm}" in
 	sha256)
 		if command -v sha256sum >/dev/null 2>&1; then
@@ -275,7 +276,6 @@ main() {
 	# ---------------------------------- #
 	# Calculate Checksum for Target File #
 	# ---------------------------------- #
-	algorithm="${algorithm:-sha256}"
 	case "${algorithm}" in
 	sha256)
 		if command -v sha256sum >/dev/null 2>&1; then
