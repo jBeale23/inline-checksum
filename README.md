@@ -22,13 +22,13 @@ After running the test suite, you can clean up the generated log files with `mak
 Assuming a site provides it, a checksum can be used to verify a downloaded script before running it as follows:
 
 ```sh
-curl -fsSL <url> | inline-checksum [--algorithm[=| ]<sha256|sha512|md5>] <checksum> | sh -
+curl -fsSL <url> | inline-checksum [--algorithm[=| ]<sha256|sha512|md5>] <checksum> [| sh -]
 ```
 
 Alternatively, a local file can have its checksum validated as follows:
 
 ```sh
-inline-checksum [--algorithm[=| ]<sha256|sha512|md5>] <checksum> <file>
+inline-checksum [--algorithm[=| ]<sha256|sha512|md5>] <checksum> <file> [| sh -]
 ```
 
 # Uninstallation
