@@ -1,14 +1,21 @@
 SHELL := /usr/bin/env sh
 TESTS := $(wildcard tests/*.sh)
 
+INSTALL ?= install
 PREFIX ?= /usr/local
 BASH_COMP_DIR := $(shell pkg-config --variable=completionsdir bash-completion 2>/dev/null)
 ifeq ($(BASH_COMP_DIR),)
     BASH_COMP_DIR = /usr/share/bash-completion/completions
 endif
 ZSH_COMP_DIR ?= $(PREFIX)/share/zsh/site-functions
+MANDIR ?= $(PREFIX)/share/man
+MAN1DIR = $(MANDIR)/man1
 
-.PHONY: clean install test uninstall
+.PHONY: all clean info install install-inline-checksum install-inline-checksum-docs test uninstall
+
+default: all
+
+all: info
 
 clean:
 ifneq ($(wildcard tests/*.log),)
@@ -32,14 +39,29 @@ test:
 	done; \
 	[ "$$FAILURE" -eq 0 ] || exit 1
 
-install:
+info:
+	@help2man inline-checksum -o docs/inline-checksum.1
+
+install: install-inline-checksum install-inline-checksum-docs
+
+install-inline-checksum:
 	@printf "Installing inline-checksum to %s/bin...\n" $(DESTDIR)$(PREFIX)
-	@install -Dm 755 inline-checksum $(DESTDIR)$(PREFIX)/bin/inline-checksum
-	@install -Dm 644 inline-checksum-completion $(DESTDIR)$(BASH_COMP_DIR)/inline-checksum
-	@install -Dm 644 inline-checksum-completion $(DESTDIR)$(ZSH_COMP_DIR)/_inline-checksum
+	@$(INSTALL) -Dm 755 inline-checksum $(DESTDIR)$(PREFIX)/bin/inline-checksum
+
+install-inline-checksum-info: info
+	@printf "Installing inline-checksum bash completion to %s...\n" $(DESTDIR)$(BASH_COMP_DIR)
+	@$(INSTALL) -Dm 644 docs/inline-checksum-completion $(DESTDIR)$(BASH_COMP_DIR)/inline-checksum
+	@printf "Installing inline-checksum zsh completion to %s...\n" $(DESTDIR)$(ZSH_COMP_DIR)
+	@$(INSTALL) -Dm 644 docs/inline-checksum-completion $(DESTDIR)$(ZSH_COMP_DIR)/_inline-checksum
+	@printf "Installing inline-checksum man page to %s...\n" $(DESTDIR)$(MAN1DIR)
+	-@$(INSTALL) -Dm 644 docs/inline-checksum.1 $(DESTDIR)$(MAN1DIR)/inline-checksum.1
+	-@gzip $(DESTDIR)$(MAN1DIR)/inline-checksum.1
+	-@mandb -q
 
 uninstall:
 	@printf "Uninstalling inline-checksum from %s/bin...\n" $(DESTDIR)$(PREFIX)
 	@$(RM) $(DESTDIR)$(PREFIX)/bin/inline-checksum
 	@$(RM) $(DESTDIR)$(BASH_COMP_DIR)/inline-checksum
 	@$(RM) $(DESTDIR)$(ZSH_COMP_DIR)/_inline-checksum
+	@$(RM) $(DESTDIR)$(MAN1DIR)/inline-checksum.1
+	-@mandb -q
