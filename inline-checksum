@@ -64,18 +64,19 @@ usage() {
 		Usage: ${_program_name} [-h|V] | [-x] [-a[=| ]<ALGORITHM>] <CHECKSUM> [TARGET_FILE]
 
 		Options:
-		  -h, --help                  Show this help message and exit.
-		  -V, --version               Show version information and exit.
-		  -a, --algorithm <ALGORITHM> The algorithm used to compute the checksum. Accepts one of 'sha256', 'sha512', or 'md5'. Defaults to 'sha256' if unspecified.
-		  -x, --output-filename       Output filename when piping, instead of file contents. The caller is responsible for cleaning up any resulting temporary files.
-		      --                      Stop processing command line arguments.
+		  -h, --help                   Show this help message and exit.
+		  -V, --version                Show version information and exit.
+		  -a, --algorithm <ALGORITHM>  The algorithm used to compute the checksum. Accepts one of 'sha256', 'sha512', or 'md5'. Defaults to 'sha256' if unspecified.
+		  -x, --output-filename        Output filename when piping, instead of file contents. The caller is responsible for cleaning up any resulting temporary files.
+		      --                       Stop processing command line arguments.
 
 		Positional Arguments:
-		  <CHECKSUM>                  The checksum against which to compare.
-		  [TARGET_FILE]               The file to compute a checksum for. If absent or '-', reads input from stdin.
+		  <CHECKSUM>                   The checksum against which to compare.
+		  [TARGET_FILE]                The file to compute a checksum for. If absent or '-', reads input from stdin.
 
 		Examples:
-		  curl -fsSL <url> | inline-checksum [-x] [--algorithm[=| ]<sha256|sha512|md5>] <checksum> | sh -
+		  curl -fsSL <url> | inline-checksum [-x] [--algorithm[=| ]<sha256|sha512|md5>] <checksum> [| sh -]
+
 		  inline-checksum [-x] [--algorithm[=| ]<sha256|sha512|md5>] <checksum> <file> [| sh -]
 	EOF
 }
@@ -83,7 +84,7 @@ usage() {
 version() {
 	cat <<-EOF
 		Inline-Checksum ${_version}
-		Copyright © 2026 Josh Beale <jbeale2023@gmail.com>.
+		Copyright (C) 2026 Josh Beale <jbeale2023@gmail.com>.
 		Licence MIT: <https://directory.fsf.org/wiki/License:Expat>
 		This is free software: you are free to change and redistribute it.
 		There is NO WARRANTY, to the extent permitted by law.
