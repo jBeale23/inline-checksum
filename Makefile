@@ -55,7 +55,7 @@ install-inline-checksum:
 	@printf "Installing inline-checksum to %s/bin...\n" $(DESTDIR)$(PREFIX)
 	@$(INSTALL) -Dm 755 inline-checksum $(DESTDIR)$(PREFIX)/bin/inline-checksum
 
-install-inline-checksum-info: info
+install-inline-checksum-info: docs/inline-checksum.1.gz
 	@printf "Installing inline-checksum bash completion to %s...\n" $(DESTDIR)$(BASH_COMP_DIR)
 	@$(INSTALL) -Dm 644 docs/inline-checksum-completion $(DESTDIR)$(BASH_COMP_DIR)/inline-checksum
 	@printf "Installing inline-checksum zsh completion to %s...\n" $(DESTDIR)$(ZSH_COMP_DIR)
